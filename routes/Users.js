@@ -71,7 +71,7 @@ users.post("/login", (req, res) => {
                         email: user.email
                     };
                     let token = jwt.sign(payload, process.env.SECRET_KEY, {
-                        expiresIn: 2440
+                        expiresIn: "1h"
                     });
                     res.status(200).json({ Token: token });
                 } else {
