@@ -1,6 +1,6 @@
 {
-    "short_name": "HR App",
-    "name": "HR App",
+    "short_name": "HR",
+    "name": "HR",
     "icons": [],
     "start_url": ".",
     "display": "standalone",
