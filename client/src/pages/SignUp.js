@@ -1,22 +1,22 @@
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
 const emailRegex = RegExp(
     /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
 );
 
-function isValid(userData, formErrors) {
+function isValid(data, errors) {
     let valid = true;
-
-    Object.values(formErrors).forEach(val => {
-        if (val.length > 0) {
-            valid = false;
-        }
-    });
-
-    Object.values(userData).forEach(val => {
+    Object.values(data).forEach(val => {
         if (val.length === 0) {
             valid = false;
         }
+
+        Object.values(errors).forEach(val => {
+            if (val.length > 0) {
+                valid = false;
+            }
+        });
     });
     return valid;
 }
@@ -28,7 +28,7 @@ class SignUp extends Component {
         this.state = {
             statusCode: undefined,
             isLoading: false,
-            userData: {
+            data: {
                 email: "",
                 password: "",
                 first_name: "",
@@ -46,30 +46,36 @@ class SignUp extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
-    registerUser(host, data) {
+    async registerUser(host, data) {
+        await fetch(host + "/users/register", {
+            method: "POST",
+            headers: new Headers({
+                "Content-Type": "application/json"
+            }),
+            body: JSON.stringify(data)
+        })
+            .then(response => response.json())
+            .then(response => {
+                this.setState({
+                    isLoggedIn: true,
+                    statusCode: response.status
+                });
+                console.log(response);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        this.setState({ isLoading: false });
         console.log(this.state);
-
-        // fetch(host + "/users/register", {
-        //     method: "POST",
-        //     headers: new Headers({
-        //         "Content-Type": "application/json"
-        //     }),
-        //     body: JSON.stringify(data)
-        // })
-        //     .then(response => {
-        //         console.log(response);
-        //     })
-        //     .catch(error => {
-        //         console.error(error);
-        //     });
     }
 
     handleSubmit(e) {
         e.preventDefault();
+        this.setState({ isLoading: true });
         const state = this.state;
-        if (isValid(state.userData, state.formErrors)) {
-            console.log(state.userData);
-            this.registerUser("http://localhost:3001", this.state.userData);
+        if (isValid(state.data, state.formErrors)) {
+            console.log(state.data);
+            this.registerUser("http://localhost:3001", this.state.data);
         } else {
             console.error("Invalid form");
         }
@@ -80,7 +86,7 @@ class SignUp extends Component {
 
         const name = e.target.name;
         const value = e.target.value;
-        const userData = { ...this.state.userData };
+        const data = { ...this.state.data };
         const formErrors = { ...this.state.formErrors };
 
         switch (name) {
@@ -93,9 +99,9 @@ class SignUp extends Component {
                     value.length < 3 ? "Minimum 3 characters required" : "";
                 break;
             case "email":
-                // formErrors.email = !emailRegex.test(value)
-                //     ? "Invalid email address"
-                //     : "";
+                formErrors.email = !emailRegex.test(value)
+                    ? "Invalid email address"
+                    : "";
                 break;
             case "password":
                 formErrors.password =
@@ -107,13 +113,13 @@ class SignUp extends Component {
                 break;
         }
 
-        userData[e.target.name] = e.target.value;
-        this.setState({ userData, formErrors });
+        data[e.target.name] = e.target.value;
+        this.setState({ data, formErrors });
     }
 
     render() {
         const state = this.state;
-        const { userData, formErrors } = state;
+        const { data, formErrors } = state;
 
         return (
             <div>
@@ -123,7 +129,7 @@ class SignUp extends Component {
                         type="text"
                         placeholder="First Name"
                         name="first_name"
-                        value={userData.first_name}
+                        value={data.first_name}
                         onChange={this.handleChange}
                         required
                     />
@@ -134,7 +140,7 @@ class SignUp extends Component {
                         type="text"
                         placeholder="Last Name"
                         name="last_name"
-                        value={userData.last_name}
+                        value={data.last_name}
                         onChange={this.handleChange}
                         required
                     />
@@ -145,7 +151,7 @@ class SignUp extends Component {
                         type="text"
                         placeholder="Email"
                         name="email"
-                        value={userData.email}
+                        value={data.email}
                         onChange={this.handleChange}
                         required
                     />
@@ -156,7 +162,7 @@ class SignUp extends Component {
                         type="password"
                         placeholder="Password"
                         name="password"
-                        value={userData.password}
+                        value={data.password}
                         onChange={this.handleChange}
                         required
                     />
@@ -167,6 +173,8 @@ class SignUp extends Component {
                         Sign Up
                     </button>
                 </form>
+                <Link to="/sign-in">Sign In</Link>
+                <Link to="/">Homepage</Link>
             </div>
         );
     }

@@ -3,9 +3,9 @@ const users = express.Router();
 const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+require("dotenv").config();
 
 const User = require("../models/User");
-users.use(cors());
 
 const checkToken = (req, res, next) => {
     const header = req.headers["authorization"];
@@ -42,7 +42,8 @@ users.post("/register", (req, res) => {
                     User.create(userData)
                         .then(user => {
                             res.status(201).json({
-                                message: user.email + " registered!"
+                                message:
+                                    user.email + " successfully registered!"
                             });
                         })
                         .catch(err => {
@@ -50,7 +51,7 @@ users.post("/register", (req, res) => {
                         });
                 });
             } else {
-                res.status(302).json({ error: "User already exists" });
+                res.status(302).json({ error: user.email + " already exists" });
             }
         })
         .catch(err => {
@@ -97,6 +98,7 @@ users.get("/", checkToken, (req, res) => {
             });
         } else {
             User.find()
+                .sort({ last_name: 1 })
                 .then(docs => {
                     const response = {
                         users: docs.map(doc => doc)
