@@ -3,16 +3,49 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { setStateData } from "../actions";
 import get from "lodash";
-import { Redirect } from "react-router-dom";
 import Paper from '@material-ui/core/Paper';
 import { Avatar } from "@material-ui/core";
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import PropTypes from 'prop-types';
+import withStyles from '@material-ui/core/styles/withStyles';
+import CssBaseline from '@material-ui/core/CssBaseline';
+
+const styles = theme => ({
+    main: {
+        width: 'auto',
+        display: 'block', // Fix IE 11 issue.
+        marginLeft: theme.spacing.unit * 3,
+        marginRight: theme.spacing.unit * 3,
+        [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
+            width: 400,
+            marginLeft: 'auto',
+            marginRight: 'auto',
+        },
+    },
+    paper: {
+        marginTop: theme.spacing.unit * 8,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
+    },
+    avatar: {
+        margin: theme.spacing.unit,
+        backgroundColor: theme.palette.secondary.main,
+    },
+    form: {
+        width: '100%', // Fix IE 11 issue.
+        marginTop: theme.spacing.unit,
+    },
+    submit: {
+        marginTop: theme.spacing.unit * 3,
+    },
+});
 
 export const emailRegex = RegExp(
     /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
@@ -132,23 +165,18 @@ class Sign extends Component {
     render() {
         const state = this.state;
         const { data, formErrors } = state;
-
+        const { classes } = this.props;
         return (
-            <div
-            style={{
-                justifyContent: "center",
-                marginTop: 100,
-                marginLeft: 400,
-                marginRight: 400,
-              }}>
-                <Paper alignItems='center'>
-                   {/*  <Avatar >
+            <main className={classes.main}>
+                <CssBaseline />
+                <Paper className={classes.paper}>
+                    <Avatar className={classes.avatar}>
                         <LockOutlinedIcon />
-                    </Avatar>  */}
-                    <Typography component="h1" variant="h5" align = 'center'>
+                    </Avatar>
+                    <Typography component="h1" variant="h5" align='center'>
                         Sign in
                     </Typography>
-                    <form onSubmit={this.handleSubmit}  width = '100%'>
+                    <form className={classes.form} onSubmit={this.handleSubmit} width='100%'>
                         <FormControl margin="normal" required fullWidth>
                             <InputLabel htmlFor="email">Email Address</InputLabel>
                             <Input id="email" name="email" autoComplete="email" autoFocus value={data.email}
@@ -170,18 +198,19 @@ class Sign extends Component {
                         <Button
                             type="submit"
                             fullWidth
-                            variant="contained"
                             color="primary"
-                            onSubmit={this.handleSubmit}>
+                            variant="contained"
+                            onSubmit={this.handleSubmit}
+                            className={classes.submit}>
                             Sign in
                         </Button>
                     </form>
 
-                    <Typography component="h1" variant="subheading" align = 'center'>Want to create an account?<Link to="/sign-up">Sign Up</Link></Typography>
-                    <Typography component="h1" variant="subheading" align = 'center'>Return to <Link to="/">Homepage</Link></Typography>
-                    
+                    <Typography component="h1" variant="subheading" align='center'>Want to create an account?<Link to="/sign-up">Sign Up</Link></Typography>
+                    <Typography component="h1" variant="subheading" align='center'>Return to <Link to="/">Homepage</Link></Typography>
+
                 </Paper>
-            </div>
+            </main>
         );
     }
 }
@@ -196,7 +225,11 @@ const mapStateToProps = state => {
     };
 };
 
+Sign.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(Sign);
+)(withStyles(styles)(Sign));

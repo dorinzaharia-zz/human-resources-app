@@ -1,5 +1,49 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import PropTypes from 'prop-types';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import FormControl from '@material-ui/core/FormControl';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Input from '@material-ui/core/Input';
+import InputLabel from '@material-ui/core/InputLabel';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import withStyles from '@material-ui/core/styles/withStyles';
+import Avatar from '@material-ui/core/Avatar';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+
+const styles = theme => ({
+    main: {
+        width: 'auto',
+        display: 'block', // Fix IE 11 issue.
+        marginLeft: theme.spacing.unit * 3,
+        marginRight: theme.spacing.unit * 3,
+        [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
+            width: 400,
+            marginLeft: 'auto',
+            marginRight: 'auto',
+        },
+    },
+    paper: {
+        marginTop: theme.spacing.unit * 8,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
+    },
+    avatar: {
+        margin: theme.spacing.unit,
+        backgroundColor: theme.palette.secondary.main,
+    },
+    form: {
+        width: '100%', // Fix IE 11 issue.
+        marginTop: theme.spacing.unit,
+    },
+    submit: {
+        marginTop: theme.spacing.unit * 3,
+    },
+});
 
 const emailRegex = RegExp(
     /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
@@ -120,64 +164,79 @@ class SignUp extends Component {
     render() {
         const state = this.state;
         const { data, formErrors } = state;
+        const { classes } = this.props;
 
         return (
             <div>
-                <form onSubmit={this.handleSubmit}>
-                    <h1>Sign Up</h1>
-                    <input
-                        type="text"
-                        placeholder="First Name"
-                        name="first_name"
-                        value={data.first_name}
-                        onChange={this.handleChange}
-                        required
-                    />
-                    {formErrors.first_name.length > 0 && (
-                        <small>{formErrors.first_name}</small>
-                    )}
-                    <input
-                        type="text"
-                        placeholder="Last Name"
-                        name="last_name"
-                        value={data.last_name}
-                        onChange={this.handleChange}
-                        required
-                    />
-                    {formErrors.last_name.length > 0 && (
-                        <small>{formErrors.last_name}</small>
-                    )}
-                    <input
-                        type="text"
-                        placeholder="Email"
-                        name="email"
-                        value={data.email}
-                        onChange={this.handleChange}
-                        required
-                    />
-                    {formErrors.email.length > 0 && (
-                        <small>{formErrors.email}</small>
-                    )}
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        name="password"
-                        value={data.password}
-                        onChange={this.handleChange}
-                        required
-                    />
-                    {formErrors.password.length > 0 && (
-                        <small>{formErrors.password}</small>
-                    )}
-                    <button type="submit" onSubmit={this.handleSubmit}>
-                        Sign Up
-                    </button>
-                </form>
-                <Link to="/sign-in">Sign In</Link>
-                <Link to="/">Homepage</Link>
+                <main className={classes.main}>
+                    <CssBaseline />
+                    <Paper className={classes.paper}>
+                        <Avatar className={classes.avatar}>
+                            <LockOutlinedIcon />
+                        </Avatar>
+                        <Typography component="h1" variant="h5">
+                            Sign Up
+                        </Typography>
+                        <form className={classes.form} onSubmit={this.handleSubmit}>
+                            <FormControl margin="normal" required fullWidth>
+                                <InputLabel htmlFor="first_name">First Name</InputLabel>
+                                <Input id="first_name" name="first_name" autoComplete="first_name" autoFocus onChange={this.handleChange} value={data.first_name} required />
+                            </FormControl>
+                            {formErrors.first_name.length > 0 && (
+                                <small>{formErrors.first_name}</small>
+                            )}
+                            {/*<input type="text" placeholder="First Name" name="first_name" value={data.first_name} onChange={this.handleChange} required/>
+                    {formErrors.first_name.length > 0 && (<small>{formErrors.first_name}</small>)} */}
+                            <FormControl margin="normal" required fullWidth>
+                                <InputLabel htmlFor="last_name">Last Name</InputLabel>
+                                <Input id="last_name" name="last_name" autoComplete="last_name" autoFocus onChange={this.handleChange} value={data.last_name} required />
+                            </FormControl>
+                            {formErrors.last_name.length > 0 && (
+                                <small>{formErrors.last_name}</small>
+                            )}
+                            {/*  <input type="text" placeholder="Last Name" name="last_name" value={data.last_name} onChange={this.handleChange} required
+                        />
+                        {formErrors.last_name.length > 0 && ( <small>{formErrors.last_name}</small>)} */}
+                            <FormControl margin="normal" required fullWidth>
+                                <InputLabel htmlFor="email">Email Address</InputLabel>
+                                <Input id="email" name="email" autoComplete="email" autoFocus value={data.email}
+                                    onChange={this.handleChange} required />
+                            </FormControl>
+                            {formErrors.email.length > 0 && (
+                                <small>{formErrors.email}</small>
+                            )}
+                            {/* <input type="text" placeholder="Email" name="email" value={data.email} onChange={this.handleChange} required/>
+                        {formErrors.email.length > 0 && (<small>{formErrors.email}</small>)} */}
+                            <FormControl margin="normal" required fullWidth>
+                                <InputLabel htmlFor="password">Password</InputLabel>
+                                <Input name="password" type="password" id="password" autoComplete="current-password" value={data.password}
+                                    onChange={this.handleChange}
+                                    required />
+                            </FormControl>
+                            {/*  <input type="password" placeholder="Password" name="password" value={data.password} onChange={this.handleChange} required/>
+                        {formErrors.password.length > 0 && (<small>{formErrors.password}</small>)} */}
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                color="primary"
+                                className={classes.submit}
+                                onSubmit={this.handleSubmit}>
+                                Sign Up
+                        </Button>
+                            {/*<button type="submit" onSubmit={this.handleSubmit}>Sign Up</button> */}
+                        </form>
+                        <Typography className={classes.form} component="h1" variant="subheading" align='center'>Already have an account?<Link to="/sign-in">Sign In</Link></Typography>
+                        <Typography component="h1" variant="subheading" align='center'>Return to <Link to="/">Homepage</Link></Typography>
+                    </Paper>
+                </main>
             </div>
         );
     }
 }
 
-export default SignUp;
+SignUp.propTypes = {
+    classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(SignUp);
