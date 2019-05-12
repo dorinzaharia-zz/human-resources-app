@@ -14,7 +14,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import { mainListItems, secondaryListItems } from '../components/listItems';
 import Card from '../components/MediaCard';
-import TextButtons from '../components/TextButtons';
+import Button from '@material-ui/core/Button';
 
 const drawerWidth = 240;
 
@@ -137,12 +137,7 @@ class Dashboard extends React.Component {
               className={classes.title}>
               Dashboard
             </Typography>
-            <TextButtons/>
-           {/* LOGOUT BUTTON <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton> */}
+            <Button color="inherit">Log Out</Button>
           </Toolbar>
         </AppBar>
         <Drawer
