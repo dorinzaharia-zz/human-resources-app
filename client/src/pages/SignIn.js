@@ -3,7 +3,50 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { setStateData } from "../actions";
 import get from "lodash";
-import { Redirect } from "react-router-dom";
+import Paper from "@material-ui/core/Paper";
+import { Avatar } from "@material-ui/core";
+import Input from "@material-ui/core/Input";
+import InputLabel from "@material-ui/core/InputLabel";
+import FormControl from "@material-ui/core/FormControl";
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import PropTypes from "prop-types";
+import withStyles from "@material-ui/core/styles/withStyles";
+import CssBaseline from "@material-ui/core/CssBaseline";
+
+const styles = theme => ({
+    main: {
+        width: "auto",
+        display: "block", // Fix IE 11 issue.
+        marginLeft: theme.spacing.unit * 3,
+        marginRight: theme.spacing.unit * 3,
+        [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
+            width: 400,
+            marginLeft: "auto",
+            marginRight: "auto"
+        }
+    },
+    paper: {
+        marginTop: theme.spacing.unit * 8,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit *
+            3}px ${theme.spacing.unit * 3}px`
+    },
+    avatar: {
+        margin: theme.spacing.unit,
+        backgroundColor: theme.palette.secondary.main
+    },
+    form: {
+        width: "100%", // Fix IE 11 issue.
+        marginTop: theme.spacing.unit
+    },
+    submit: {
+        marginTop: theme.spacing.unit * 3
+    }
+});
 
 export const emailRegex = RegExp(
     /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
@@ -60,13 +103,13 @@ class SignIn extends Component {
         const state = this.state;
         if (isValid(state.data, state.formErrors)) {
             console.log(state.data);
-            this.signIn("http://localhost:3001", this.state.data);
+            this.SignInIn("http://localhost:3001", this.state.data);
         } else {
             console.error("Invalid form");
         }
     }
 
-    async signIn(host, data) {
+    async SignInIn(host, data) {
         await fetch(host + "/users/login", {
             method: "POST",
             headers: new Headers({
@@ -123,40 +166,83 @@ class SignIn extends Component {
     render() {
         const state = this.state;
         const { data, formErrors } = state;
-
+        const { classes } = this.props;
         return (
-            <div>
-                <form onSubmit={this.handleSubmit}>
-                    <h1>Sign In</h1>
-                    <input
-                        type="text"
-                        placeholder="Email"
-                        name="email"
-                        value={data.email}
-                        onChange={this.handleChange}
-                        required
-                    />
-                    {formErrors.email.length > 0 && (
-                        <small>{formErrors.email}</small>
-                    )}
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        name="password"
-                        value={data.password}
-                        onChange={this.handleChange}
-                        required
-                    />
-                    {formErrors.password.length > 0 && (
-                        <small>{formErrors.password}</small>
-                    )}
-                    <button type="submit" onSubmit={this.handleSubmit}>
+            <main className={classes.main}>
+                <CssBaseline />
+                <Paper className={classes.paper}>
+                    <Avatar className={classes.avatar}>
+                        <LockOutlinedIcon />
+                    </Avatar>
+                    <Typography component="h1" variant="h5" align="center">
                         Sign In
-                    </button>
-                </form>
-                <Link to="/sign-up">Sign Up</Link>
-                <Link to="/">Homepage</Link>
-            </div>
+                    </Typography>
+                    <form
+                        className={classes.form}
+                        onSubmit={this.handleSubmit}
+                        width="100%"
+                    >
+                        <FormControl margin="normal" required fullWidth>
+                            <InputLabel htmlFor="email">
+                                Email Address
+                            </InputLabel>
+                            <Input
+                                id="email"
+                                name="email"
+                                autoComplete="email"
+                                autoFocus
+                                value={data.email}
+                                onChange={this.handleChange}
+                                required
+                            />
+                        </FormControl>
+                        {formErrors.email.length > 0 && (
+                            <small>{formErrors.email}</small>
+                        )}
+                        <FormControl margin="normal" required fullWidth>
+                            <InputLabel htmlFor="password">Password</InputLabel>
+                            <Input
+                                name="password"
+                                type="password"
+                                id="password"
+                                autoComplete="current-password"
+                                value={data.password}
+                                onChange={this.handleChange}
+                                required
+                            />
+                        </FormControl>
+                        {formErrors.password.length > 0 && (
+                            <small>{formErrors.password}</small>
+                        )}
+                        <Button
+                            type="submit"
+                            fullWidth
+                            color="primary"
+                            variant="contained"
+                            onSubmit={this.handleSubmit}
+                            className={classes.submit}
+                        >
+                            SignIn in
+                        </Button>
+                    </form>
+
+                    <Typography
+                        component="h1"
+                        variant="subheading"
+                        align="center"
+                    >
+                        Want to create an account?
+                        <Link to="/sign-up">Sign Up</Link>
+                    </Typography>
+                    <Typography
+                        component="h1"
+                        variant="subheading"
+                        align="center"
+                    >
+                        Return to <Link to="/">Homepage</Link>
+                    </Typography>
+                </Paper>
+            </main>
         );
     }
 }
@@ -171,7 +257,11 @@ const mapStateToProps = state => {
     };
 };
 
+SignIn.propTypes = {
+    classes: PropTypes.object.isRequired
+};
+
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(SignIn);
+)(withStyles(styles)(SignIn));
