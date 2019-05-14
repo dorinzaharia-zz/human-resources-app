@@ -74,7 +74,7 @@ users.post("/login", (req, res) => {
                     let token = jwt.sign(payload, process.env.SECRET_KEY, {
                         expiresIn: "1h"
                     });
-                    res.status(200).json({ Token: token });
+                    res.status(200).json({ token: token });
                 } else {
                     res.status(403).json({ error: "Incorrect password." });
                 }

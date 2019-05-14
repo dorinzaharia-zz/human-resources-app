@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
+import { connect } from "react-redux";
+import { setStateData } from "./actions";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import Homepage from "./pages/Homepage";
@@ -7,6 +9,10 @@ import Dashboard from "./pages/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 class App extends Component {
+    componentWillMount() {
+        this.props.setStateData("isLoggedIn", false);
+    }
+
     render() {
         return (
             <Switch>
@@ -18,5 +24,11 @@ class App extends Component {
         );
     }
 }
+const mapDispatchToProps = {
+    setStateData
+};
 
-export default App;
+export default connect(
+    null,
+    mapDispatchToProps
+)(App);
