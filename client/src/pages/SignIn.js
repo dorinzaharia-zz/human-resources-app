@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { setStateData } from "../actions";
-import get from "lodash";
+import { setStateData, setUsers } from "../actions";
 import Paper from "@material-ui/core/Paper";
 import { Avatar } from "@material-ui/core";
 import Input from "@material-ui/core/Input";
@@ -75,25 +74,22 @@ class SignIn extends Component {
         super(props);
 
         this.state = {
-            statusCode: "",
             isLoading: false,
             isLoggedIn: false,
+            users: "",
             data: {
                 email: "",
                 password: ""
             },
             formErrors: {
                 email: "",
-                password: ""
+                password: "",
+                server: ""
             }
         };
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-    }
-
-    componentWillMount() {
-        this.props.setStateData("isLoggedIn", false);
     }
 
     handleSubmit(e) {
@@ -103,13 +99,13 @@ class SignIn extends Component {
         const state = this.state;
         if (isValid(state.data, state.formErrors)) {
             console.log(state.data);
-            this.SignInIn("http://localhost:3001", this.state.data);
+            this.signIn("http://localhost:3001", this.state.data);
         } else {
             console.error("Invalid form");
         }
     }
 
-    async SignInIn(host, data) {
+    async signIn(host, data) {
         await fetch(host + "/users/login", {
             method: "POST",
             headers: new Headers({
@@ -117,22 +113,46 @@ class SignIn extends Component {
             }),
             body: JSON.stringify(data)
         })
-            .then(response => response.json())
             .then(response => {
                 this.setState({
-                    isLoggedIn: true,
                     statusCode: response.status
                 });
-                this.props.setStateData("isLoggedIn", true);
-                this.props.history.push("/dashboard");
                 console.log(response);
+                return response.json();
+            })
+            .then(response => {
+                if (this.state.statusCode === 200) {
+                    this.props.setStateData("token", response.token);
+                    this.props.setStateData("isLoggedIn", true);
+                    this.getUsers(host);
+                    setTimeout(() => {
+                        this.props.history.push("/dashboard");
+                    }, 1000);
+                }
             })
             .catch(error => {
                 console.error(error);
             });
 
-        // this.setState({ isLoading: false });
         console.log(this.state);
+    }
+
+    async getUsers(host) {
+        console.log(this.props.token);
+        await fetch(host + "/users/", {
+            method: "GET",
+            headers: new Headers({
+                "Content-Type": "application/json",
+                Authorization: "Basic " + this.props.token
+            })
+        })
+            .then(response => response.json())
+            .then(response => {
+                this.props.setUsers(response.users);
+            })
+            .catch(error => {
+                console.error(error);
+            });
     }
 
     handleChange(e) {
@@ -158,7 +178,9 @@ class SignIn extends Component {
             default:
                 break;
         }
-
+        if (e.target.name === "email") {
+            this.props.setStateData(e.target.name, e.target.value);
+        }
         data[e.target.name] = e.target.value;
         this.setState({ data, formErrors });
     }
@@ -222,7 +244,7 @@ class SignIn extends Component {
                             onSubmit={this.handleSubmit}
                             className={classes.submit}
                         >
-                            SignIn in
+                            Sign in
                         </Button>
                     </form>
 
@@ -248,12 +270,14 @@ class SignIn extends Component {
 }
 
 const mapDispatchToProps = {
-    setStateData
+    setStateData,
+    setUsers
 };
 
 const mapStateToProps = state => {
     return {
-        isLoggedIn: get(state, "isLoggedIn", "")
+        isLoggedIn: state["isLoggedIn"],
+        token: state["token"]
     };
 };
 

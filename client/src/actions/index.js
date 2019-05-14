@@ -7,3 +7,10 @@ export function setStateData(key, value) {
         value
     };
 }
+
+export function setUsers(value) {
+    return {
+        type: constants.SET_USERS,
+        value
+    };
+}
