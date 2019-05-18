@@ -92,21 +92,6 @@ function Homepage(props) {
     const { classes } = props;
     return (
         <div className={classes.layout}>
-          {/*   {/* <h1>Homepage</h1> 
-            <Toolbar variant='regular'>
-                <Typography
-                    component="h2"
-                    variant="h5"
-                    color="inherit"
-                    align="center"
-                    headlineMapping='h5'
-                    gutterBottom='true'
-                    noWrap
-                > Welcome to the Human Resources App!
-                    </Typography>
-            </Toolbar>
-            <Divider />*/}
- 
             <main>
           {/* Main featured post */}
           <Paper className={classes.mainFeaturedPost}>

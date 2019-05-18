@@ -5,6 +5,8 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
+import { connect } from "react-redux";
+import { find } from "lodash";
 
 function TabContainer(props) {
     return (
@@ -24,6 +26,13 @@ const styles = theme => ({
         backgroundColor: theme.palette.background.paper,
     },
 });
+
+function User (props){
+    const myUser = find(props.users, { email: props.email });
+    return (
+        {myUser}
+    );
+}
 
 class SimpleTabs extends React.Component {
 
@@ -47,7 +56,7 @@ class SimpleTabs extends React.Component {
                         <Tab label="Details" />
                     </Tabs>
                 </AppBar>
-                {value === 0 && <TabContainer>Item One  {/**fetch the user details */}  </TabContainer>}
+                {value === 0 && <TabContainer>   fetch user details  </TabContainer>}
             </div>
         );
     }
@@ -57,4 +66,11 @@ SimpleTabs.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(SimpleTabs);
+const mapStateToProps = (state, ownProps) => {
+    return {
+        users: state["users"],
+        email: state["email"]
+    };
+};
+
+export default connect(mapStateToProps)(withStyles(styles)(SimpleTabs));

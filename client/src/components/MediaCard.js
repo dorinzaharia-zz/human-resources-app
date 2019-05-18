@@ -29,24 +29,18 @@ function MediaCard(props) {
             <CardActionArea>
                 <CardMedia
                     className={classes.media}
-                    //fetch the user image
-                    //image = {};
+                //fetch the user image
+                //image = {};
                 />
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">
-                        Welcome User! {myUser.first_name}
+                        Welcome {myUser.last_name} {myUser.first_name}
                     </Typography>
-                    <Typography component="p">{myUser.last_name}</Typography>
+                    <Typography component="p"></Typography>
                 </CardContent>
             </CardActionArea>
             <CardActions>
                 <Tabs />
-                {/* <Button size="small" color="primary">
-          Share
-        </Button>
-        <Button size="small" color="primary">
-          Learn More
-        </Button> */}
             </CardActions>
         </Card>
     );

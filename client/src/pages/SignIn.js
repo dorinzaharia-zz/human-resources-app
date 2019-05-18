@@ -244,7 +244,7 @@ class SignIn extends Component {
                             onSubmit={this.handleSubmit}
                             className={classes.submit}
                         >
-                            Sign in
+                            Sign In 
                         </Button>
                     </form>
 
