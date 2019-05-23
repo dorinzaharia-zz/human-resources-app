@@ -1,8 +1,9 @@
 const express = require("express");
 const users = express.Router();
-const cors = require("cors");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const multer = require("multer");
+
 require("dotenv").config();
 
 const User = require("../models/User");
@@ -19,6 +20,32 @@ const checkToken = (req, res, next) => {
         res.sendStatus(403);
     }
 };
+
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, "./uploads/");
+    },
+    filename: function(req, file, cb) {
+        cb(null, new Date().toISOString() + file.originalname);
+    }
+});
+
+const fileFilter = (req, file, cb) => {
+    // reject a file
+    if (file.mimetype === "image/jpeg" || file.mimetype === "image/png") {
+        cb(null, true);
+    } else {
+        cb(null, false);
+    }
+};
+
+const upload = multer({
+    storage: storage,
+    limits: {
+        fileSize: 1024 * 1024 * 5
+    },
+    fileFilter: fileFilter
+});
 
 // User registration
 users.post("/register", (req, res) => {
@@ -151,6 +178,35 @@ users.patch("/:id", checkToken, (req, res) => {
         }
     });
 });
+
+// Update users image
+users.patch(
+    "/images/:userId",
+    checkToken,
+    upload.single("image"),
+    (req, res) => {
+        jwt.verify(req.token, process.env.SECRET_KEY, err => {
+            if (err) {
+                res.status(403).json({
+                    error: "Could not connect to the protected route"
+                });
+            } else {
+                const id = req.params.userId;
+                console.log(id);
+                User.updateOne({ _id: id }, { image: req.file.path })
+                    .then(result => {
+                        res.status(200).json(result);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                        res.status(500).json({
+                            error: err
+                        });
+                    });
+            }
+        });
+    }
+);
 
 // Delete users data
 users.delete("/:id", checkToken, (req, res) => {
