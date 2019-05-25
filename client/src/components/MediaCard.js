@@ -10,6 +10,7 @@ import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 import Tabs from "./SimpleTabs";
+import { withRouter } from 'react-router-dom';  
 
 const styles = {
     card: {
@@ -23,6 +24,7 @@ const styles = {
 
 function MediaCard(props) {
     const { classes } = props;
+    
     const myUser = find(props.users, { email: props.email });
     return (
         <Card className={classes.card}>

@@ -15,10 +15,12 @@ import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { mainListItems, secondaryListItems } from "../components/listItems";
-import Card from "../components/MediaCard";
+import MediaCard from "../components/MediaCard";
 import Button from "@material-ui/core/Button";
-import People from "./People";
 import { Route, Switch } from "react-router-dom";
+import PeopleCard from "../components/PeopleCard";
+import People from "../pages/People";
+
 
 const drawerWidth = 240;
 
@@ -118,30 +120,25 @@ class Dashboard extends React.Component {
 
     render() {
         const { classes } = this.props;
-
+        const currentPath = window.location.pathname;
         return (
-            <div className={classes.root}>
+            <div className={classes.root}>   
                 <CssBaseline />
                 <AppBar
                     position="absolute"
                     className={classNames(
                         classes.appBar,
-                        this.state.open && classes.appBarShift
-                    )}
-                >
+                        this.state.open && classes.appBarShift)}>
                     <Toolbar
                         disableGutters={!this.state.open}
-                        className={classes.toolbar}
-                    >
+                        className={classes.toolbar}>
                         <IconButton
                             color="inherit"
                             aria-label="Open drawer"
                             onClick={this.handleDrawerOpen}
                             className={classNames(
                                 classes.menuButton,
-                                this.state.open && classes.menuButtonHidden
-                            )}
-                        >
+                                this.state.open && classes.menuButtonHidden)}>
                             <MenuIcon />
                         </IconButton>
                         <Typography
@@ -149,10 +146,9 @@ class Dashboard extends React.Component {
                             variant="h6"
                             color="inherit"
                             noWrap
-                            className={classes.title}
-                        >
+                            className={classes.title}>
                             Dashboard
-                        </Typography>
+                    </Typography>
                         <Button color="inherit" onClick={this.handleLogOut}>
                             Log Out
                         </Button>
@@ -163,11 +159,9 @@ class Dashboard extends React.Component {
                     classes={{
                         paper: classNames(
                             classes.drawerPaper,
-                            !this.state.open && classes.drawerPaperClose
-                        )
+                            !this.state.open && classes.drawerPaperClose)
                     }}
-                    open={this.state.open}
-                >
+                    open={this.state.open}>
                     <div className={classes.toolbarIcon}>
                         <IconButton onClick={this.handleDrawerClose}>
                             <ChevronLeftIcon />
@@ -178,17 +172,13 @@ class Dashboard extends React.Component {
                     <Divider />
                     <List>{secondaryListItems}</List>
                 </Drawer>
-                <Switch>
-                    <main className={classes.content}>
-                        <div className={classes.appBarSpacer} />
-                        <Route exact path="/dashboard/home" component={Card} />
-                        <Route
-                            exact
-                            path="/dashboard/people"
-                            component={People}
-                        />
-                    </main>
-                </Switch>
+                <main className={classes.content}>
+                    <div className={classes.appBarSpacer} /> 
+                    {!currentPath.includes(`dashboard/people`)
+                        ? <MediaCard />
+                        :  <People /> }
+                    {/* <Route exact path="/dashboard/people" component={People} />  */}
+                </main>
             </div>
         );
     }

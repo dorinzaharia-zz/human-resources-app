@@ -13,41 +13,45 @@ import Tabs from "./SimpleTabs";
 import { Link } from "react-router-dom";
 import { Grid } from "@material-ui/core";
 import Paper from '@material-ui/core/Paper';
+import { withRouter } from 'react-router-dom';
+import Divider from '@material-ui/core/Divider';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 
 const styles = theme => ({
     card: {
-        //maxWidth: 500,
+        width: 400,
     },
-    media: {
-        height: 150,
-        width: 150
+    table: {
+        width: 300,
     }
-   /*  mainFeaturedPost: {
-        backgroundColor: '#3f50b5',//theme.palette.grey[800],
-        color: theme.palette.common.white,
-        marginBottom: theme.spacing.unit * 4,
-    } */
 });
 
 function PeopleCard(props) {
     const { classes } = props;
-    const listItems = props.users.map((user) =>
-  <li>{user.first_name} {user.last_name} </li>
-);
     return (
-        <Paper className={classes.mainFeaturedPost}>
-            <Grid container>
-              <Grid item md={6}>
-                <div className={classes.mainFeaturedPostContent}>
-                 {/*  <Typography component="h1" variant="h3" color="inherit" gutterBottom> */}
-                 <Link to="/dashboard">
-                 <ul>{listItems}</ul>
-                 </Link>
-                 {/*  </Typography> */}
-                </div>
-              </Grid>
-            </Grid>
-          </Paper>
+        <Paper className={classes.card}>
+            <Table className={classes.table}>
+                <TableHead>
+                    <TableRow>
+                        <TableCell>First Name</TableCell>
+                        <TableCell>Last Name</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    {props.users.map((user) => (
+                        <TableRow >
+                            {/*Edit the route here for the individual user*/ }
+                            <TableCell><Link to="/dashboard">{user.first_name}</Link> </TableCell>
+                            <TableCell><Link to="/dashboard">{user.last_name}</Link></TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+        </Paper>
     );
 }
 

@@ -1,9 +1,12 @@
 import React, { Component } from "react";
+import PeopleCard from "../components/PeopleCard";
+
+
 class People extends Component {
     render() {
         return (
             <div>
-                <small>People</small>
+                <PeopleCard/>
             </div>
         );
     }
