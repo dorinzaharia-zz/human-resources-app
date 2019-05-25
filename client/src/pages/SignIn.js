@@ -81,10 +81,10 @@ class SignIn extends Component {
                 email: "",
                 password: ""
             },
+            serverError: "",
             formErrors: {
                 email: "",
-                password: "",
-                server: ""
+                password: ""
             }
         };
 
@@ -94,7 +94,7 @@ class SignIn extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        this.setState({ isLoading: true });
+        this.setState({ isLoading: true, serverError: "" });
 
         const state = this.state;
         if (isValid(state.data, state.formErrors)) {
@@ -102,6 +102,7 @@ class SignIn extends Component {
             this.signIn("http://localhost:3001", this.state.data);
         } else {
             console.error("Invalid form");
+            this.handleServerError("Invalid form");
         }
     }
 
@@ -128,12 +129,13 @@ class SignIn extends Component {
                     setTimeout(() => {
                         this.props.history.push("/dashboard");
                     }, 1000);
+                } else {
+                    this.handleServerError(response.error);
                 }
             })
             .catch(error => {
-                console.error(error);
+                this.handleServerError(error);
             });
-
         console.log(this.state);
     }
 
@@ -185,9 +187,13 @@ class SignIn extends Component {
         this.setState({ data, formErrors });
     }
 
+    handleServerError(serverError) {
+        this.setState({ serverError });
+    }
+
     render() {
         const state = this.state;
-        const { data, formErrors } = state;
+        const { data, formErrors, serverError } = state;
         const { classes } = this.props;
         return (
             <main className={classes.main}>
@@ -244,8 +250,22 @@ class SignIn extends Component {
                             onSubmit={this.handleSubmit}
                             className={classes.submit}
                         >
-                            Sign In 
+                            Sign In
                         </Button>
+
+                        {serverError.length > 0 && (
+                            <div
+                                style={{
+                                    padding: "20px",
+                                    backgroundColor: "#E8E596",
+                                    marginBottom: "15px",
+                                    marginTop: "15px"
+                                }}
+                            >
+                                <strong>Warning! </strong>
+                                {serverError}
+                            </div>
+                        )}
                     </form>
 
                     <Typography
