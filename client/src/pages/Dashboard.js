@@ -17,6 +17,8 @@ import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import { mainListItems, secondaryListItems } from "../components/listItems";
 import Card from "../components/MediaCard";
 import Button from "@material-ui/core/Button";
+import People from "./People";
+import { Route, Switch } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -176,10 +178,17 @@ class Dashboard extends React.Component {
                     <Divider />
                     <List>{secondaryListItems}</List>
                 </Drawer>
-                <main className={classes.content}>
-                    <div className={classes.appBarSpacer} />
-                    <Card />
-                </main>
+                <Switch>
+                    <main className={classes.content}>
+                        <div className={classes.appBarSpacer} />
+                        <Route exact path="/dashboard/home" component={Card} />
+                        <Route
+                            exact
+                            path="/dashboard/people"
+                            component={People}
+                        />
+                    </main>
+                </Switch>
             </div>
         );
     }
