@@ -35,7 +35,7 @@ export const mainListItems = (
 export const secondaryListItems = (
     <div>
         <ListSubheader inset />
-        <ListItem button>
+        <ListItem button component={Link} to="/dashboard/settings">
             <ListItemIcon>
                 <AssignmentIcon />
             </ListItemIcon>

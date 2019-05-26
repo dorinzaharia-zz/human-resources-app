@@ -20,6 +20,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
+import UserCard from "../components/UserCard";
 
 const styles = theme => ({
     card: {
@@ -51,6 +52,7 @@ function PeopleCard(props) {
                     ))}
                 </TableBody>
             </Table>
+                
         </Paper>
     );
 }
@@ -62,7 +64,8 @@ PeopleCard.propTypes = {
 const mapStateToProps = (state, ownProps) => {
     return {
         users: state["users"],
-        email: state["email"]
+        email: state["email"],
+        id : state["id"]
     };
 };
 

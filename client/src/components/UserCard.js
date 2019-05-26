@@ -9,7 +9,7 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
-import Tabs from "./SimpleTabs"; 
+import Tabs from "./SimpleTabs";
 
 const styles = {
     card: {
@@ -18,13 +18,13 @@ const styles = {
     media: {
         height: 150,
         width: 150
-    },
-    display: "block"
+    }
 };
 
-function MediaCard(props) {
+function UserCard(props) {
     const { classes } = props;
-    const myUser = find(props.users, { email: props.email });
+    const myUser = find(props.users, {_id: props._id });
+    console.log(props)
     return (
         <Card className={classes.card}>
             <CardActionArea>
@@ -33,29 +33,31 @@ function MediaCard(props) {
                 //fetch the user image
                 //image = {};
                 />
+                Individual user info
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">
-                        Welcome {myUser.last_name} {myUser.first_name}
+                       {myUser.last_name} {myUser.first_name}
                     </Typography>
                     <Typography component="p"></Typography>
                 </CardContent>
             </CardActionArea>
-            <CardActions>
+           {/*  <CardActions>
                 <Tabs />
-            </CardActions>
+            </CardActions> */}
         </Card>
     );
 }
 
-MediaCard.propTypes = {
+UserCard.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state, ownProps) => {
     return {
         users: state["users"],
-        email: state["email"]
+        email: state["email"],
+        _id:state["_id"]
     };
 };
 
-export default connect(mapStateToProps)(withStyles(styles)(MediaCard));
+export default connect(mapStateToProps)(withStyles(styles)(UserCard));

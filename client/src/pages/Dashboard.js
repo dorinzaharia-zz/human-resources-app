@@ -18,9 +18,8 @@ import { mainListItems, secondaryListItems } from "../components/listItems";
 import MediaCard from "../components/MediaCard";
 import Button from "@material-ui/core/Button";
 import { Route, Switch } from "react-router-dom";
-import PeopleCard from "../components/PeopleCard";
 import People from "../pages/People";
-
+import Settings from "../components/Settings";
 
 const drawerWidth = 240;
 
@@ -174,9 +173,21 @@ class Dashboard extends React.Component {
                 </Drawer>
                 <main className={classes.content}>
                     <div className={classes.appBarSpacer} /> 
-                    {!currentPath.includes(`dashboard/people`)
-                        ? <MediaCard />
-                        :  <People /> }
+    
+                    {currentPath.includes(`/people`)
+                    ?  <People />
+                    : currentPath.includes(`/settings`)
+                    ?  <Settings/>
+                    :  <MediaCard /> 
+                    }
+
+
+                   {/*  {currentPath.includes(`/settings`)
+                    ?  <Settings/>
+                    : null }
+                    {currentPath.includes(`/people`)
+                        ? <People />
+                        :  <MediaCard /> } */}
                     {/* <Route exact path="/dashboard/people" component={People} />  */}
                 </main>
             </div>
