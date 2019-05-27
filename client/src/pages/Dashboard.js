@@ -199,6 +199,11 @@ class Dashboard extends React.Component {
                                 <UserCard id={renderProps.match.params.id} />
                             )}
                         />
+                         <Route
+                            exact
+                            path="/dashboard/settings"
+                            component={Settings}
+                        />
                     </main>
                 </Switch>
             </div>

@@ -9,9 +9,20 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
-import Tabs from "./SimpleTabs"; 
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 
-const styles = {
+
+function TabContainer(props) {
+    return (
+        <Typography component="div" style={{ padding: 8 * 3 }}>
+            {props.children}
+        </Typography>
+    );
+}
+
+const styles = theme => ({
     card: {
         //maxWidth: 500,
     },
@@ -19,20 +30,26 @@ const styles = {
         height: 150,
         width: 150
     },
-    display: "block"
-};
+    root: {
+        flexGrow: 1,
+        backgroundColor: theme.palette.background.paper,
+    }
+});
 
 function MediaCard(props) {
     const { classes } = props;
+    
     const myUser = find(props.users, { email: props.email });
     return (
+        <div>
         <Card className={classes.card}>
             <CardActionArea>
                 <CardMedia
                     className={classes.media}
                 //fetch the user image
-                //image = {};
+                //image = "image.png"
                 />
+                
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">
                         Welcome {myUser.last_name} {myUser.first_name}
@@ -41,9 +58,23 @@ function MediaCard(props) {
                 </CardContent>
             </CardActionArea>
             <CardActions>
-                <Tabs />
+            <div className={classes.root}>
+                <AppBar position="static">
+                    <Tabs >
+                        <Tab label="Details" />
+                    </Tabs>
+                </AppBar>
+                <TabContainer>   
+                {myUser.email} <br/>
+                 {myUser.date}
+                </TabContainer>
+            </div>
             </CardActions>
+            
         </Card>
+               
+
+        </div>
     );
 }
 

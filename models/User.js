@@ -23,6 +23,21 @@ const UserSchema = new Schema({
     date: {
         type: Date,
         default: Date.now
+    },
+    address: {
+        type: String
+    },
+    phone_number: {
+        type: String
+    },
+    company: {
+        type: String
+    },
+    department: {
+        type: String
+    },
+    linked_in: {
+        type: String
     }
 });
 
