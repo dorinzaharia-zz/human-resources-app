@@ -26,7 +26,7 @@ const storage = multer.diskStorage({
         cb(null, "./uploads/");
     },
     filename: function(req, file, cb) {
-        cb(null, new Date().toISOString() + file.originalname);
+        cb(null, file.originalname);
     }
 });
 
@@ -45,6 +45,21 @@ const upload = multer({
         fileSize: 1024 * 1024 * 5
     },
     fileFilter: fileFilter
+});
+
+users.get("/images/:userId", function(req, res) {
+    User.find({ _id: req.params.userId })
+        .then(docs => {
+            path = __dirname.replace("routes", "") + docs[0].image;
+            console.log(path);
+            res.status(200).sendFile(path);
+        })
+        .catch(err => {
+            console.log(err);
+            res.status(500).json({
+                error: err
+            });
+        });
 });
 
 // User registration
