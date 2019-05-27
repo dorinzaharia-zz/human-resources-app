@@ -13,6 +13,7 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import PropTypes from "prop-types";
 import withStyles from "@material-ui/core/styles/withStyles";
 import CssBaseline from "@material-ui/core/CssBaseline";
+require("dotenv").config();
 
 const styles = theme => ({
     main: {
@@ -99,7 +100,8 @@ class SignIn extends Component {
         const state = this.state;
         if (isValid(state.data, state.formErrors)) {
             console.log(state.data);
-            this.signIn("http://localhost:3001", this.state.data);
+            console.log(process.env.REACT_APP_SERVER);
+            this.signIn(process.env.REACT_APP_SERVER, this.state.data);
         } else {
             console.error("Invalid form");
             this.handleServerError("Invalid form");

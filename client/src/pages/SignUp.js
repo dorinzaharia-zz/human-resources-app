@@ -12,6 +12,7 @@ import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
 import Avatar from "@material-ui/core/Avatar";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+require("dotenv").config();
 
 const styles = theme => ({
     main: {
@@ -125,7 +126,7 @@ class SignUp extends Component {
         const state = this.state;
         if (isValid(state.data, state.formErrors)) {
             console.log(state.data);
-            this.registerUser("http://localhost:3001", this.state.data);
+            this.registerUser(process.env.REACT_APP_SERVER, this.state.data);
         } else {
             console.error("Invalid form");
         }
