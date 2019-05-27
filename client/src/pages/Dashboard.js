@@ -20,6 +20,7 @@ import Button from "@material-ui/core/Button";
 import { Route, Switch } from "react-router-dom";
 import People from "../pages/People";
 import Settings from "../components/Settings";
+import UserCard from "../components/UserCard";
 
 const drawerWidth = 240;
 
@@ -121,23 +122,28 @@ class Dashboard extends React.Component {
         const { classes } = this.props;
         const currentPath = window.location.pathname;
         return (
-            <div className={classes.root}>   
+            <div className={classes.root}>
                 <CssBaseline />
                 <AppBar
                     position="absolute"
                     className={classNames(
                         classes.appBar,
-                        this.state.open && classes.appBarShift)}>
+                        this.state.open && classes.appBarShift
+                    )}
+                >
                     <Toolbar
                         disableGutters={!this.state.open}
-                        className={classes.toolbar}>
+                        className={classes.toolbar}
+                    >
                         <IconButton
                             color="inherit"
                             aria-label="Open drawer"
                             onClick={this.handleDrawerOpen}
                             className={classNames(
                                 classes.menuButton,
-                                this.state.open && classes.menuButtonHidden)}>
+                                this.state.open && classes.menuButtonHidden
+                            )}
+                        >
                             <MenuIcon />
                         </IconButton>
                         <Typography
@@ -145,9 +151,10 @@ class Dashboard extends React.Component {
                             variant="h6"
                             color="inherit"
                             noWrap
-                            className={classes.title}>
+                            className={classes.title}
+                        >
                             Dashboard
-                    </Typography>
+                        </Typography>
                         <Button color="inherit" onClick={this.handleLogOut}>
                             Log Out
                         </Button>
@@ -158,9 +165,11 @@ class Dashboard extends React.Component {
                     classes={{
                         paper: classNames(
                             classes.drawerPaper,
-                            !this.state.open && classes.drawerPaperClose)
+                            !this.state.open && classes.drawerPaperClose
+                        )
                     }}
-                    open={this.state.open}>
+                    open={this.state.open}
+                >
                     <div className={classes.toolbarIcon}>
                         <IconButton onClick={this.handleDrawerClose}>
                             <ChevronLeftIcon />
@@ -171,25 +180,27 @@ class Dashboard extends React.Component {
                     <Divider />
                     <List>{secondaryListItems}</List>
                 </Drawer>
-                <main className={classes.content}>
-                    <div className={classes.appBarSpacer} /> 
-    
-                    {currentPath.includes(`/people`)
-                    ?  <People />
-                    : currentPath.includes(`/settings`)
-                    ?  <Settings/>
-                    :  <MediaCard /> 
-                    }
-
-
-                   {/*  {currentPath.includes(`/settings`)
-                    ?  <Settings/>
-                    : null }
-                    {currentPath.includes(`/people`)
-                        ? <People />
-                        :  <MediaCard /> } */}
-                    {/* <Route exact path="/dashboard/people" component={People} />  */}
-                </main>
+                <Switch>
+                    <main className={classes.content}>
+                        <div className={classes.appBarSpacer} />
+                        <Route
+                            exact
+                            path="/dashboard/home"
+                            component={MediaCard}
+                        />
+                        <Route
+                            exact
+                            path="/dashboard/people"
+                            component={People}
+                        />
+                        <Route
+                            path="/dashboard/people/:id"
+                            render={renderProps => (
+                                <UserCard id={renderProps.match.params.id} />
+                            )}
+                        />
+                    </main>
+                </Switch>
             </div>
         );
     }

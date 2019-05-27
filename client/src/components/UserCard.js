@@ -23,25 +23,21 @@ const styles = {
 
 function UserCard(props) {
     const { classes } = props;
-    const myUser = find(props.users, {_id: props._id });
-    console.log(props)
+    const myUser = find(props.users, { _id: props.id });
+    console.log(props);
     return (
         <Card className={classes.card}>
             <CardActionArea>
-                <CardMedia
-                    className={classes.media}
-                //fetch the user image
-                //image = {};
-                />
+                <CardMedia className={classes.media} />
                 Individual user info
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">
-                       {myUser.last_name} {myUser.first_name}
+                        {myUser.last_name} {myUser.first_name}
                     </Typography>
-                    <Typography component="p"></Typography>
+                    <Typography component="p" />
                 </CardContent>
             </CardActionArea>
-           {/*  <CardActions>
+            {/*  <CardActions>
                 <Tabs />
             </CardActions> */}
         </Card>
@@ -55,8 +51,7 @@ UserCard.propTypes = {
 const mapStateToProps = (state, ownProps) => {
     return {
         users: state["users"],
-        email: state["email"],
-        _id:state["_id"]
+        email: state["email"]
     };
 };
 

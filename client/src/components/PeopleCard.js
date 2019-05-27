@@ -12,22 +12,22 @@ import Typography from "@material-ui/core/Typography";
 import Tabs from "./SimpleTabs";
 import { Link } from "react-router-dom";
 import { Grid } from "@material-ui/core";
-import Paper from '@material-ui/core/Paper';
-import { withRouter } from 'react-router-dom';
-import Divider from '@material-ui/core/Divider';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
+import Paper from "@material-ui/core/Paper";
+import { withRouter } from "react-router-dom";
+import Divider from "@material-ui/core/Divider";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
 import UserCard from "../components/UserCard";
 
 const styles = theme => ({
     card: {
-        width: 400,
+        width: 400
     },
     table: {
-        width: 300,
+        width: 300
     }
 });
 
@@ -43,16 +43,23 @@ function PeopleCard(props) {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {props.users.map((user) => (
-                        <TableRow >
-                            {/*Edit the route here for the individual user*/ }
-                            <TableCell><Link to="/dashboard">{user.first_name}</Link> </TableCell>
-                            <TableCell><Link to="/dashboard">{user.last_name}</Link></TableCell>
+                    {props.users.map(user => (
+                        <TableRow>
+                            {/*Edit the route here for the individual user*/}
+                            <TableCell>
+                                <Link to={`/dashboard/people/${user._id}`}>
+                                    {user.first_name}
+                                </Link>
+                            </TableCell>
+                            <TableCell>
+                                <Link to={`/dashboard/people/${user._id}`}>
+                                    {user.last_name}
+                                </Link>
+                            </TableCell>
                         </TableRow>
                     ))}
                 </TableBody>
             </Table>
-                
         </Paper>
     );
 }
@@ -64,8 +71,7 @@ PeopleCard.propTypes = {
 const mapStateToProps = (state, ownProps) => {
     return {
         users: state["users"],
-        email: state["email"],
-        id : state["id"]
+        email: state["email"]
     };
 };
 
