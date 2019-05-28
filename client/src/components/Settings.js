@@ -43,13 +43,23 @@ const styles = theme => ({
         marginLeft: theme.spacing.unit * 1,
         marginRight: theme.spacing.unit *3,
         width : 350
-      } 
+      } ,
+      container: {
+        display: 'flex',
+        flexWrap: 'wrap',
+      },
 });
 
 
 function SettingsCard(props) {
     const { classes } = props;
     const myUser = find(props.users, { email: props.email });
+    const [values, setValues] = React.useState({
+      });
+    const handleChange = name => event => {
+        setValues({ ...values, [name]: event.target.value });
+      };
+    
     return (
          <div>
             <main className={classes.main}>
@@ -61,13 +71,13 @@ function SettingsCard(props) {
                         <Typography component="h1" variant="subtitle1" align = "center">
                             Fill in your missing details or change your existing data
                         </Typography>
-                        <form className={classes.form} >
+                        <form className={classes.container} noValidate autoComplete="off">
                         <TextField
                                 id="outlined-name"
                                 label="Email"
                                 className={classes.textField}
                                 value={myUser.email}
-                                /* onChange={handleChange('name')} */
+                                onChange={handleChange('Email')}
                                 margin="normal"
                                 variant="outlined"
                                 

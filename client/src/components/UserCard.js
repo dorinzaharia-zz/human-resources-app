@@ -17,6 +17,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import { CardHeader } from "@material-ui/core";
 
 function TabContainer(props) {
     return (
@@ -32,7 +33,10 @@ const styles = theme => ({
     },
     media: {
         height: 150,
-        width: 150
+        width: 250,
+        alignItems : "center",
+        paddingTop: '25%', // 16:9
+        
     },
     root: {
         flexGrow: 1,
@@ -47,8 +51,9 @@ function UserCard(props) {
     return (
         <Card className={classes.card}>
             <CardActionArea>
+                <CardHeader/>
                 <CardMedia className={classes.media} 
-                //image = {}
+                 image = {"http://localhost:3000/users/images/" + myUser._id }
                 />
                 <CardContent>
                     <Typography gutterBottom variant="h5" component="h2">
