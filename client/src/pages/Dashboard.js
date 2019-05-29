@@ -120,7 +120,6 @@ class Dashboard extends React.Component {
 
     render() {
         const { classes } = this.props;
-        const currentPath = window.location.pathname;
         return (
             <div className={classes.root}>
                 <CssBaseline />

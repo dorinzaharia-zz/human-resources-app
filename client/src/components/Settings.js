@@ -1,12 +1,9 @@
-import React from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { find } from "lodash"; 
+import { find } from "lodash";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import FormControl from "@material-ui/core/FormControl";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
@@ -41,89 +38,122 @@ const styles = theme => ({
     },
     textField: {
         marginLeft: theme.spacing.unit * 1,
-        marginRight: theme.spacing.unit *3,
-        width : 350
-      } ,
-      container: {
+        marginRight: theme.spacing.unit * 3,
+        marginTop: theme.spacing.unit * 1,
+        width: 350
+    },
+    container: {
         display: 'flex',
         flexWrap: 'wrap',
-      },
+    },
+    input: {
+        display: 'none',
+      }
 });
 
+class SettingsCard extends Component {
+    constructor(props) {
+        super(props);
 
-function SettingsCard(props) {
-    const { classes } = props;
-    const myUser = find(props.users, { email: props.email });
-    const [values, setValues] = React.useState({
-      });
-    const handleChange = name => event => {
-        setValues({ ...values, [name]: event.target.value });
-      };
-    
-    return (
-         <div>
-            <main className={classes.main}>
-                <CssBaseline />
+        this.state = {
+            email: "",
+            password: "",
+            phone_number: "",
+            linked_in: ""
+        };
+        this.handleChange = this.handleChange.bind(this);
+        //this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleChange(e) {
+        e.preventDefault();
+        this.setState({ [e.target.name]: e.target.value });
+    }
+
+
+    render() {
+        const { classes } = this.props;
+        const myUser = find(this.props.users, { email: this.props.email });
+        console.log(this.state);
+        return (
+            <div>
+                <main className={classes.main}>
+                    <CssBaseline />
                     <Paper className={classes.paper}>
                         <Typography component="h1" variant="h5">
                             Manage personal data
                         </Typography>
-                        <Typography component="h1" variant="subtitle1" align = "center">
+                        <Typography component="h1" variant="subtitle1" align="center">
                             Fill in your missing details or change your existing data
                         </Typography>
                         <form className={classes.container} noValidate autoComplete="off">
-                        <TextField
+                            <TextField
                                 id="outlined-name"
-                                label="Email"
+                                label={myUser.email} 
                                 className={classes.textField}
-                                value={myUser.email}
-                                onChange={handleChange('Email')}
+                                value={this.state.email}
+                                onChange={this.handleChange}
                                 margin="normal"
                                 variant="outlined"
-                                
-                        />
-                        <TextField
+                                name="email"
+                            />
+                            <TextField
                                 id="outlined-name"
                                 label="password"
                                 className={classes.textField}
-                                /* onChange={handleChange('name')} */
+                                onChange={this.handleChange}
                                 margin="normal"
                                 variant="outlined"
-                        />
-                                
-                        <TextField
+                                name="password"
+                            />
+                            <TextField
                                 id="outlined-name"
-                                label="Phone number"
+                                label={myUser.phone_number}
                                 className={classes.textField}
-                                value={myUser.phone_number}
-                                /* onChange={handleChange('name')} */
+                                value={this.state.phone_number}
+                                onChange={this.handleChange}
+                                name="phone_number"
                                 margin="normal"
                                 variant="outlined"
-                        />
+                            />
+                            <TextField
+                                id="outlined-name"
+                                label={myUser.linked_in}
+                                className={classes.textField}
+                                value={this.state.linked_in}
+                                onChange={this.handleChange}
+                                margin="normal"
+                                variant="outlined"
+                                name="linked_in"
+                            />
+                           
+                            <input
+                                accept="image/*"
+                                className={classes.input}
+                                id="outlined-button-file"
+                                multiple
+                                type="file"
+                            />
+                               <label htmlFor="outlined-button-file">
+                                    <Button variant="outlined" component="span" className={classes.textField}>
+                                    Upload
+                                    </Button>
+                                </label> 
 
-                                
-                        <TextField
-                                id="outlined-name"
-                                label="Linked In"
-                                className={classes.textField}
-                                value={myUser.linked_in}
-                                /* onChange={handleChange('name')} */
-                                margin="normal"
-                                variant="outlined"
-                        />                
                             <Button
                                 type="submit"
                                 fullWidth
                                 variant="contained"
                                 color="primary"
-                                className={classes.submit}> Submit changes
+                                className={classes.textField}> Submit changes
                             </Button>
                             {/*<button type="submit" onSubmit={this.handleSubmit}>Sign Up</button> */}
                         </form>
                     </Paper>
                 </main>
             </div>
-    );
+        );
+    }
 }
 
 SettingsCard.propTypes = {
@@ -135,7 +165,7 @@ const mapStateToProps = (state, ownProps) => {
         users: state["users"],
         email: state["email"],
         password: state["password"],
-        image:state["image"]
+        image: state["image"]
     };
 };
 
