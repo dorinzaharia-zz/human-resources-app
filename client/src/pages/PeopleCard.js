@@ -56,10 +56,9 @@ PeopleCard.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = state => {
     return {
-        users: state["users"],
-        email: state["email"]
+        users: state["users"]
     };
 };
 

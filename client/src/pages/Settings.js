@@ -1,18 +1,19 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { find } from "lodash";
+import { get } from "lodash";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import withStyles from "@material-ui/core/styles/withStyles";
-import TextField from '@material-ui/core/TextField';
+import TextField from "@material-ui/core/TextField";
+require("dotenv").config();
 
 const styles = theme => ({
     main: {
         width: "auto",
-        display: "block", // Fix IE 11 issue.
+        display: "block",
         marginLeft: theme.spacing.unit * 3,
         marginRight: theme.spacing.unit * 3,
         [theme.breakpoints.up(400 + theme.spacing.unit * 3 * 2)]: {
@@ -43,12 +44,12 @@ const styles = theme => ({
         width: 350
     },
     container: {
-        display: 'flex',
-        flexWrap: 'wrap',
+        display: "flex",
+        flexWrap: "wrap"
     },
     input: {
-        display: 'none',
-      }
+        display: "none"
+    }
 });
 
 class SettingsCard extends Component {
@@ -70,11 +71,10 @@ class SettingsCard extends Component {
         this.setState({ [e.target.name]: e.target.value });
     }
 
-
     render() {
         const { classes } = this.props;
-        const myUser = find(this.props.users, { email: this.props.email });
-        console.log(this.state);
+        const props = this.props;
+        const myUser = props.user;
         return (
             <div>
                 <main className={classes.main}>
@@ -83,13 +83,22 @@ class SettingsCard extends Component {
                         <Typography component="h1" variant="h5">
                             Manage personal data
                         </Typography>
-                        <Typography component="h1" variant="subtitle1" align="center">
-                            Fill in your missing details or change your existing data
+                        <Typography
+                            component="h1"
+                            variant="subtitle1"
+                            align="center"
+                        >
+                            Fill in your missing details or change your existing
+                            data
                         </Typography>
-                        <form className={classes.container} noValidate autoComplete="off">
+                        <form
+                            className={classes.container}
+                            noValidate
+                            autoComplete="off"
+                        >
                             <TextField
                                 id="outlined-name"
-                                label={myUser.email} 
+                                label={myUser.email}
                                 className={classes.textField}
                                 value={this.state.email}
                                 onChange={this.handleChange}
@@ -126,7 +135,6 @@ class SettingsCard extends Component {
                                 variant="outlined"
                                 name="linked_in"
                             />
-                           
                             <input
                                 accept="image/*"
                                 className={classes.input}
@@ -134,20 +142,26 @@ class SettingsCard extends Component {
                                 multiple
                                 type="file"
                             />
-                               <label htmlFor="outlined-button-file">
-                                    <Button variant="outlined" component="span" className={classes.textField}>
+                            <label htmlFor="outlined-button-file">
+                                <Button
+                                    variant="outlined"
+                                    component="span"
+                                    className={classes.textField}
+                                >
                                     Upload
-                                    </Button>
-                                </label> 
+                                </Button>
+                            </label>
 
                             <Button
                                 type="submit"
                                 fullWidth
                                 variant="contained"
                                 color="primary"
-                                className={classes.textField}> Submit changes
+                                className={classes.textField}
+                                onSubmit={this.handleSubmit}
+                            >
+                                Submit changes
                             </Button>
-                            {/*<button type="submit" onSubmit={this.handleSubmit}>Sign Up</button> */}
                         </form>
                     </Paper>
                 </main>
@@ -160,12 +174,9 @@ SettingsCard.propTypes = {
     classes: PropTypes.object.isRequired
 };
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = state => {
     return {
-        users: state["users"],
-        email: state["email"],
-        password: state["password"],
-        image: state["image"]
+        user: get(state, "user", {})
     };
 };
 

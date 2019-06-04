@@ -1,9 +1,10 @@
 import React from "react";
 import PropTypes from "prop-types";
 import classNames from "classnames";
-import { withStyles } from "@material-ui/core/styles";
+import { Route, Switch } from "react-router-dom";
 import { connect } from "react-redux";
-import { setStateData } from "../actions";
+import { setStoreData, setUser } from "../actions";
+import { withStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
@@ -14,13 +15,12 @@ import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import { mainListItems, secondaryListItems } from "../components/listItems";
-import MediaCard from "../components/MediaCard";
 import Button from "@material-ui/core/Button";
-import { Route, Switch } from "react-router-dom";
-import People from "../pages/People";
-import Settings from "../components/Settings";
-import UserCard from "../components/UserCard";
+import { mainListItems, secondaryListItems } from "../components/ListItems";
+import MediaCard from "./MediaCard";
+import PeopleCard from "../pages/PeopleCard";
+import Settings from "./Settings";
+import UserCard from "./UserCard";
 
 const drawerWidth = 240;
 
@@ -29,7 +29,7 @@ const styles = theme => ({
         display: "flex"
     },
     toolbar: {
-        paddingRight: 24 // keep right padding when drawer closed
+        paddingRight: 24
     },
     toolbarIcon: {
         display: "flex",
@@ -106,6 +106,10 @@ class Dashboard extends React.Component {
         open: true
     };
 
+    componentWillMount() {
+        this.props.setUser();
+    }
+
     handleDrawerOpen = () => {
         this.setState({ open: true });
     };
@@ -115,7 +119,7 @@ class Dashboard extends React.Component {
     };
 
     handleLogOut = () => {
-        this.props.setStateData("isLoggedIn", false);
+        this.props.setStoreData("isLoggedIn", false);
     };
 
     render() {
@@ -190,7 +194,7 @@ class Dashboard extends React.Component {
                         <Route
                             exact
                             path="/dashboard/people"
-                            component={People}
+                            component={PeopleCard}
                         />
                         <Route
                             path="/dashboard/people/:id"
@@ -198,7 +202,7 @@ class Dashboard extends React.Component {
                                 <UserCard id={renderProps.match.params.id} />
                             )}
                         />
-                         <Route
+                        <Route
                             exact
                             path="/dashboard/settings"
                             component={Settings}
@@ -215,7 +219,8 @@ Dashboard.propTypes = {
 };
 
 const mapDispatchToProps = {
-    setStateData
+    setStoreData,
+    setUser
 };
 
 export default connect(

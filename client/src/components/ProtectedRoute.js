@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
+import { get } from "lodash";
 
 export const ProtectedRoute = ({ component: Component, ...rest }) => {
     return (
@@ -28,7 +29,7 @@ export const ProtectedRoute = ({ component: Component, ...rest }) => {
 
 const mapStateToProps = state => {
     return {
-        isLoggedIn: state["isLoggedIn"]
+        isLoggedIn: get(state, "isLoggedIn", "")
     };
 };
 
